@@ -21,7 +21,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This document is provided as a supplementary material for the research on the topic of Christmas Beetles' passive thermoregulation. Here we provide details on data processing, statistical analysis and figures of the original manuscript submitted for peer review. 
+In this document we tested if the optical properties of Christmas Beetles can predict the heating of their elytra due to radiative heat in different stepectral bands (TOTAL: 400 to 1700nm, NIR: 700 to 1700 nm, VIS: 400 to 700 nm).  We also tested if the presence of the elytra closed on top of the body can help reducing the heating rate of the beetle body. 
+
+We first processed the raw spectral data (reflectance and transmittance) and combined it with the irradiance spectra of the light source to obtain the values of reflectivity, transmissivity and absorptivity for each beetle in our sample (n=56 elytra representing 28 species of Christmas beetles) 
+
+Then we processed the heating raw data to obtain the total change in temperature after 5 minutes, and the maximum heating rate under each illumination (TOTAL, NIR and VIS). 
+
+For the single elytra experiments we used linear models and correlations to explore the relation between the optical properties and the two heating variables. For the beetle body experiments we used a bootstrap paired test to determine if the body of a recently dead beetle has a higher change in temperature when the elytra are open than when they are closed. 
+
+We provide details on data processing, statistical analysis and figures of the original manuscript submitted for peer review. 
 
 The following code is written in the R programming language.
 
