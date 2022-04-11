@@ -1,6 +1,6 @@
 ---
 title: "HeatingRatesFullCode"
-author: "Laura Ospina-Rozo"
+author: "Authors removed for double-blind review"
 date: "12/01/2022"
 output:
   html_document: 
@@ -33,7 +33,7 @@ We provide details on data processing, statistical analysis and figures of the o
 
 The following code is written in the R programming language.
 
-The full script and Raw data files can be found here: https://github.com/lospinarozo/PrettyCoolBeetlesCodeAndData 
+The .Rmd file and Raw data can be found here: https://bit.ly/3OeBNU6 (This link contains information that may disclose author's identity)
 
 # Libraries
 
@@ -1734,8 +1734,14 @@ plotS1A <- ggplot() +
   geom_line(data=theorySun,mapping = aes(x=wl,
                                          y=irradiance))+
   theme_minimal()+
-  xlab(" ")+
-  ylab("Irradiance")
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank())+
+  ylab(expression("   Irradiance \n (W/m^2/nm)"))+
+  theme(axis.title.y = element_text(size=5),
+        axis.text.y = element_text(size=5)) +
+  scale_x_continuous(breaks=seq(300,1700,200)) +
+  theme(plot.margin = unit(c(0.4, 0.4, 0, 0.4), "cm"))
 
 plotS1B <- ggplot() +
   geom_area(aes(x=FiltersN$wl[FiltersN$Band == "vis"], 
@@ -1746,7 +1752,14 @@ plotS1B <- ggplot() +
             fill="#FF0000", alpha = 0.3)+
   theme_minimal()+
   xlab(" ")+
-  ylab("Transmittance (%)")
+  ylab("Transmittance (%)")+
+  theme(axis.title.y = element_text(size=5),
+        axis.text.y = element_text(size=5)) +
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x = element_blank())+
+  scale_x_continuous(breaks=seq(300,1700,200)) +
+  theme(plot.margin = unit(c(0.2, 0.4, 0.3, 0.4), "cm"))
 
 plotS1C <- ggplot() +
   geom_area(aes(x=filters$wl, y=filters$vis.f),
@@ -1758,7 +1771,13 @@ plotS1C <- ggplot() +
             colour="black")+
   theme_minimal()+
   xlab("Wavelength (nm)")+
-  ylab("Irradiance")
+  ylab(expression("   Irradiance \n (W/m^2/nm)"))+
+  theme(axis.title.y = element_text(size=5),
+        axis.title.x = element_text(size=6),
+        axis.text.y = element_text(size=5),
+        axis.text.x = element_text(size=5)) +
+  scale_x_continuous(breaks=seq(300,1700,200)) +
+  theme(plot.margin = unit(c(0, 0.4, 0, 0.4), "cm"))
 
 plot_grid(plotS1A, plotS1B,plotS1C, 
           align = "v", axis = "bt", rel_widths = c(1, 1),
