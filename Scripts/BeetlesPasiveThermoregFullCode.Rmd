@@ -115,10 +115,18 @@ filters<-read.csv("../Data/4_SolarSimulatorAndFilters.csv") %>%
   as.rspec(.) %>% 
   procspec(.,fixneg = "zero") 
   
-# Solar Irradiance
+# Solar Irradiance for the interval relevant for this manuscript
 theorySun<-read.csv("../Data/5_TheoreticalIrradiance.csv") %>% 
   as.rspec(.) %>% 
   procspec(.,fixneg = "zero") 
+
+# Standard Solar Irradiance from 280 to 4000 nm
+# ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2 (AM1.5)
+# Global tilt  W*m-2*nm-1
+# from https://www.pveducation.org/pvcdrom/appendices/standard-solar-spectra 
+theorySunALL<-read.csv("../Data/12_SolarIrradianceALLWavelengths.csv") %>%  
+  as.rspec(., whichwl = "wl") 
+
 
 ```
 
@@ -1715,7 +1723,7 @@ ggplot(NULL, aes(x = Band, Difference)) +
 
 ## Light Source
 
-### Figure S1
+### Figure S2
 
 ```{r fig.width = 5, fig.height = 10}
 
@@ -1726,20 +1734,45 @@ FiltersN <-
   mutate (Band = substr(filters, 1, 3 ) ) %>% 
   select (-filters)
 
+
+plotS1D <- ggplot() +
+  geom_area(data= theorySunALL[theorySunALL$wl<400,],
+            mapping = aes(x=wl, y=gobalIrrad),
+            fill="#8D53FC", alpha = 0.3) +
+  geom_area(data= theorySunALL[theorySunALL$wl>400 & 
+                                 theorySunALL$wl<700,],
+            mapping = aes(x=wl, y=gobalIrrad),
+            fill="#00A08A", alpha = 0.3)+
+  geom_area(data= theorySunALL[theorySunALL$wl>700 &
+                               theorySunALL$wl<1700,],
+            mapping = aes(x=wl, y=gobalIrrad),
+            fill="#FF0000", alpha = 0.3) +
+  geom_line(data=theorySunALL,
+            mapping = aes(x=wl, y=gobalIrrad))+
+  theme_bw()+
+  theme(axis.title.x = element_blank())+
+  ylab(expression("   Irradiance \n (W/m^2/nm)"))+ 
+  theme(axis.title.y = element_text(size=7),
+        axis.text.y = element_text(size=7),
+        axis.text.x = element_text(size=7),
+        axis.title.x = element_blank()) +
+  theme(plot.margin = unit(c(0.4, 0.4, 0, 0.4), "cm"))+
+  xlim(250,3000)
+
 plotS1A <- ggplot() +
   geom_area(aes(x=filters$wl, y=filters$halfsun),
             fill="#F98400", alpha = 0.3) +
   geom_line(aes(x=filters$wl, y=filters$halfsun),
-            colour="gray") +
+            colour="#E6B200") +
   geom_line(data=theorySun,mapping = aes(x=wl,
                                          y=irradiance))+
-  theme_minimal()+
+  theme_bw()+
   theme(axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank())+
   ylab(expression("   Irradiance \n (W/m^2/nm)"))+
-  theme(axis.title.y = element_text(size=5),
-        axis.text.y = element_text(size=5)) +
+  theme(axis.title.y = element_text(size=7),
+        axis.text.y = element_text(size=7)) +
   scale_x_continuous(breaks=seq(300,1700,200)) +
   theme(plot.margin = unit(c(0.4, 0.4, 0, 0.4), "cm"))
 
@@ -1750,11 +1783,11 @@ plotS1B <- ggplot() +
   geom_area(aes(x=FiltersN$wl[FiltersN$Band =="nir"], 
                 y=FiltersN$Transm[FiltersN$Band =="nir"]),
             fill="#FF0000", alpha = 0.3)+
-  theme_minimal()+
+  theme_bw()+
   xlab(" ")+
   ylab("Transmittance (%)")+
-  theme(axis.title.y = element_text(size=5),
-        axis.text.y = element_text(size=5)) +
+  theme(axis.title.y = element_text(size=7),
+        axis.text.y = element_text(size=7)) +
   theme(axis.ticks.x = element_blank(),
         axis.text.x = element_blank(),
         axis.title.x = element_blank())+
@@ -1762,28 +1795,73 @@ plotS1B <- ggplot() +
   theme(plot.margin = unit(c(0.2, 0.4, 0.3, 0.4), "cm"))
 
 plotS1C <- ggplot() +
-  geom_area(aes(x=filters$wl, y=filters$vis.f),
-            fill="#00A08A", alpha = 0.3) +
-  geom_area(aes(x=filters$wl, y=filters$nir.f),
-            fill="#FF0000", alpha = 0.3)+
   geom_line(data=filters,mapping = aes(x=wl,
                                        y=Full.f),
-            colour="black")+
-  theme_minimal()+
+            colour="#E6B200")+
+  geom_area(aes(x=filters$wl, y=filters$vis.f),
+            fill="#00A08A", alpha = 0.3) +
+  geom_line(aes(x=filters$wl, y=filters$vis.f),
+            colour="#00A08A", alpha = 0.9) +
+  geom_area(aes(x=filters$wl, y=filters$nir.f),
+            fill="#FF0000", alpha = 0.3)+
+  geom_line(aes(x=filters$wl, y=filters$nir.f),
+            colour="#FF0000", alpha = 0.9)+
+  geom_line(data=filters,mapping = aes(x=wl,
+                                       y=Full.f),
+            colour="#E6B200")+
+  theme_bw()+
   xlab("Wavelength (nm)")+
   ylab(expression("   Irradiance \n (W/m^2/nm)"))+
-  theme(axis.title.y = element_text(size=5),
-        axis.title.x = element_text(size=6),
-        axis.text.y = element_text(size=5),
-        axis.text.x = element_text(size=5)) +
+  theme(axis.title.y = element_text(size=7),
+        axis.title.x = element_text(size=7),
+        axis.text.y = element_text(size=7),
+        axis.text.x = element_text(size=7)) +
   scale_x_continuous(breaks=seq(300,1700,200)) +
   theme(plot.margin = unit(c(0, 0.4, 0, 0.4), "cm"))
 
-plot_grid(plotS1A, plotS1B,plotS1C, 
+plot_grid(plotS1D, plotS1A, plotS1B,plotS1C, 
           align = "v", axis = "bt", rel_widths = c(1, 1),
           ncol=1)
 
 ```
+
+Percentages in the different bands: 
+
+
+```{r warnings=FALSE, messages=FALSE}
+
+# Area under the curve for each band
+
+# Sun from Standard Solar Spectrum
+# ASTM G173-03 Reference Spectra Derived from SMARTS v. 2.9.2 (AM1.5)
+# Global tilt  W*m-2*nm-1
+
+SolarAUCTot <- summary(theorySunALL)$B1
+SolarAUCUV <- summary(theorySunALL[theorySunALL$wl<400,])$B1
+SolarAUCVIS <- summary(theorySunALL[theorySunALL$wl>=400 & theorySunALL$wl<=700,])$B1
+SolarAUCNIR <- summary(theorySunALL[theorySunALL$wl>700 & theorySunALL$wl<=1700,])$B1
+SolarAUCNIRlong <- summary(theorySunALL[theorySunALL$wl>1700,])$B1
+
+# Percentages per spectral band
+SolarAUCUV/SolarAUCTot*100 # UV spectral band
+SolarAUCVIS/SolarAUCTot*100 # VIS spectral band
+SolarAUCNIR/SolarAUCTot*100 # NIR spectral band
+SolarAUCNIRlong/SolarAUCTot*100 # NIR not considered
+
+# Ratio between the full spectrum and the solar simulator in the relevant range
+
+(AUCsun)/(SolarAUCVIS + SolarAUCNIR)
+
+# Ratio per each band: 
+
+(AUCnir)/SolarAUCNIR 
+
+(AUCvis)/SolarAUCVIS 
+
+```
+
+
+
 
 ## Repeatability
 
