@@ -64,6 +64,7 @@ DATA & FILE OVERVIEW
 9_ExampleSetup.csv
 10_BeetleBodyConsolidated.csv 
 11_SingleElytraConsolidated.csv
+12_SolarIrradianceALLWavelengths.csv
 
 
 2. Relationship between files, if important:All these fileas are combined in a consolidated data frame in our code to explore the different questions we set in our manuscript. 
@@ -81,14 +82,14 @@ METHODOLOGICAL INFORMATION
 
 Files 1 to 3: Data was obtanied with a dual spectrometer to capture the reflectance, transmittance from the dorsal side of the elyra and transmittance from the ventral sid eof the elytra, from 400 to 1700 nm. 
 File 4: Solar simulator data obtained from the manufacturer. Filter transimttance data was also measured with a spectrometer.
-File 5: Theoretical irradiance data was found online
+File 5: Theoretical irradiance from 400 to 1700nm. Data was found online. 
 File 6: Temperature data was recorded with thermocouples in a controlled environment. Details of the set up are available in our paper. This file contains the raw data extracted from the thermometer for each sample of single elytra.
 File 7: This contains mainly the side of the platform (inside the chamber) in which the sample was placed. Also, the size of each beetle corresponds to a mean value of its species. This was measured with ImageJ from calibrated pictures that included a scale bar.
 File 8: Temperature data was recorded with thermocouples in a controlled environment. Details of the set up are available in our paper. This file contains the raw data extracted from the thermometer for the body of 11 recently dead beetles.
 File 9: This data set contains the example of raw data obtain from the 4 thermocouples used in our set up. Two of them were used to monitor the temperature of the water bath and the chamber and ensure it remains constant. The other two were used to register the heating of the samples. 
 File 10: Consolidated data after processing used to conduct the statistical analysis for the beetle body experiments. 
 File 11: Consolidated data after processing used to conduct the statistical analysis for the single elytra experiments. Note: This set does not include data for the repeatability analysis. 
-
+File 12: Standard Solar Irradiance from 280 to 4000 nm  from https://www.pveducation.org/pvcdrom/appendices/standard-solar-spectra. This file is required to calculate the contributions of different wavebands to the total radiative energy. 
 
 2. Methods for processing the data: 
 All the methods to process the data are in the section "Data Processing" of the full code. That file can be found in GitHub, Figshare and it can be access directly from a link in the manuscript sent for revision.
@@ -359,6 +360,22 @@ DT5_VIS: Final change in temperature after 5 minutes (correlated with final stea
 maxHRTOT: maximum heating rate (delta between two adjacent points) (degrees celsius/s) under TOTAL illumination
 maxHRNIR: maximum heating rate (delta between two adjacent points) (degrees celsius/s) under NIR illumination
 maxHRVIS: maximum heating rate (delta between two adjacent points) (degrees celsius/s) under VIS illumination
+
+4. Missing data codes: NA
+
+5. Specialized formats or abbreviations: NA
+
+
+DATA-SPECIFIC INFORMATION FOR: 12_SolarIrradianceALLWavelengths
+
+1. Number of variables: 2
+
+2. Number of cases/rows: 1883
+
+3. Variable List: 
+
+wl : wavelength (nm)
+gobalIrrad: theoretical solar irradiance (W /m2 / nm) from 280 to 4000nm
 
 4. Missing data codes: NA
 
